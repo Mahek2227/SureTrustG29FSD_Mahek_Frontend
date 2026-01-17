@@ -1,0 +1,1 @@
+export const baseUrl = "https://social-media-backend-st-g29.onrender.com/api";
