@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
 
   preview: {
-    allowedHosts: ["social-media-frontend-st-g29.onrender.com"],
+    allowedHosts: ["https://suretrustg29fsd-mahek-frontend.onrender.com"],
     host: "0.0.0.0",
     port: Number(process.env.PORT) || 4173,
   },
