@@ -1,1 +1,2 @@
-export const baseUrl = "https://suretrustg29fsd-mahek.onrender.com";
+export const baseUrl =
+  import.meta.env.VITE_API_URL || "http://localhost:5000/api";

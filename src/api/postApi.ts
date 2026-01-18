@@ -38,6 +38,47 @@ export const restorePost = async (postId:string) => {
   return await response.json();
 };
 
+export const getMyPosts = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${baseUrl}/post/myposts`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch my posts");
+  return res.json();
+};
+
+export const getLikedPosts = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${baseUrl}/post/likedposts`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch liked posts");
+  return res.json();
+};
+
+export const likePost = async (postId: string) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${baseUrl}/post/like/${postId}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Like failed");
+  return res.json();
+};
+
+export const commentPost = async (postId: string, text: string) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${baseUrl}/post/comment/${postId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text }),
+  });
+  if (!res.ok) throw new Error("Comment failed");
+  return res.json();
+};
 export const deletePost = async (postId: string) => {
   const token = localStorage.getItem("token");
   if (!token) throw new Error("No token found");

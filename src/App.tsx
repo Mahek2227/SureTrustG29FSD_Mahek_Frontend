@@ -12,6 +12,7 @@ import LikedPosts from "./pages/LikedPosts";
 import DeletedPosts from "./pages/DeletedPosts";
 import FriendProfile from './pages/FriendProfilepage'
 import Settings from "./pages/Settings";
+import MyPost from "./pages/Mypost";
 import Chatpopup from './components/Chatpopup'
 import { useEffect } from 'react'
 
@@ -47,6 +48,8 @@ function App() {
           <Route path="/liked-posts" element={<LikedPosts />} />
           <Route path="/deleted-posts" element={<DeletedPosts />} />
           <Route path="/friend/:_id" element={<FriendProfile />} />
+          <Route path="/mypost" element={<MyPost />} />
+
 
           {/* 404 last */}
           <Route path="*" element={<Error />} />

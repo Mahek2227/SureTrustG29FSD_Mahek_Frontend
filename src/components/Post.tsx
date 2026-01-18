@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
-import { baseUrl } from "../baseUrl";
 
 interface Comment {
   id: string;
@@ -14,10 +12,13 @@ interface PostCardProps {
   caption: string;
   likes: number;
   comments_count: number;
-  postImage?: string; // Fixed: Made optional to match Home.tsx data
+  postImage?: string;
   isProfilePage?: boolean;
   comments?: Comment[];
   onDelete?: (id: string) => void;
+  onLike?: (id: string) => void;
+  onComment?: (id: string, text: string) => void;
+ 
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -29,29 +30,14 @@ const PostCard: React.FC<PostCardProps> = ({
   comments_count,
   postImage,
   isProfilePage = false,
+  comments,
   onDelete,
-  comments
+  onLike,
+  onComment,
 }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [commentText, setCommentText] = useState(""); // ✅ Fix: added state
   const menuRef = useRef<HTMLDivElement>(null);
-
-  // Fixed: Removed unused 'comment' state and console.log
-
-  const handleAddComment = async () => {
-    try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        alert("You are not logged in");
-        return;
-      }
-    
-      // TODO: Implement comment posting logic
-      console.log("Adding comment...");
-    } catch (error) {
-      console.error("Comment failed", error);
-    }
-  };
 
   /* -------------------- Close menu on outside click -------------------- */
   useEffect(() => {
@@ -60,50 +46,24 @@ const PostCard: React.FC<PostCardProps> = ({
         setShowMenu(false);
       }
     };
-
-    if (showMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    if (showMenu) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showMenu]);
-
-  /* ----------------------------- Like post ----------------------------- */
-  const handleLikePost = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("You are not logged in");
-        return;
-      }
-
-      await axios.post(
-        `${baseUrl}/post/like/${id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      console.error("Like failed", error);
-    }
-  };
 
   /* ---------------------------- Delete post ---------------------------- */
   const handleDelete = () => {
     if (!onDelete) return;
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
-    );
-    if (!confirmDelete) return;
-
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
     setShowMenu(false);
     onDelete(id);
+  };
+
+  /* ---------------------------- Add Comment ---------------------------- */
+  const handleAddComment = () => {
+    if (!onComment) return;
+    if (!commentText.trim()) return;
+    onComment(id, commentText);
+    setCommentText("");
   };
 
   return (
@@ -148,7 +108,7 @@ const PostCard: React.FC<PostCardProps> = ({
       {/* Caption */}
       <p className="mt-3 text-gray-700">{caption}</p>
 
-      {/* Image - Fixed: Safe rendering for optional postImage */}
+      {/* Image */}
       {postImage && (
         <div className="mt-3">
           <img
@@ -166,18 +126,26 @@ const PostCard: React.FC<PostCardProps> = ({
       </div>
 
       {/* Actions */}
-      <div className="flex justify-around mt-4">
-        <button
-          onClick={handleLikePost}
-          className="text-xl hover:scale-110 transition"
-        >
-          👍
-        </button>
-        <button className="text-xl hover:scale-110 transition">💬</button>
-        <button className="text-xl hover:scale-110 transition">↗️</button>
-      </div>
+      {/* Actions */}
+<div className="flex justify-around mt-4">
+  <button
+    onClick={() => onLike && onLike(id)}
+    className="text-xl hover:scale-110 transition"
+  >
+    👍
+  </button>
+  <button
+    onClick={handleAddComment} // Fix: call this to add comment
+    className="text-xl hover:scale-110 transition"
+  >
+    💬
+  </button>
+  <button className="text-xl hover:scale-110 transition">↗️</button>
+</div>
 
-      {/* Comments Section - Fixed: Cleaner conditional rendering */}
+      
+
+      {/* Comments */}
       <div className="items-center mt-4">
         <h3 className="text-lg font-semibold">Comments</h3>
         <div className="mt-2 max-h-40 overflow-y-auto">
@@ -193,19 +161,21 @@ const PostCard: React.FC<PostCardProps> = ({
         </div>
       </div>
 
-      {/* Comment Input */}
+      {/* Add Comment */}
       <div className="flex items-center border rounded-full px-2 py-2 mt-4 focus-within:ring-2 focus-within:ring-blue-600">
         <input
-          type="text"
-          placeholder="Add a comment..."
-          className="flex grow px-4 py-2 focus:outline-none bg-transparent"
-        />
-        <button
-          className="bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition"
-          onClick={handleAddComment}
-        >
-          Comment
-        </button>
+  type="text"
+  placeholder="Add a comment..."
+  className="flex grow px-4 py-2 focus:outline-none bg-transparent"
+  value={commentText}
+  onChange={(e) => setCommentText(e.target.value)}
+/>
+<button
+  className="bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition"
+  onClick={handleAddComment} // this calls onComment prop
+>
+  Comment
+</button>
       </div>
     </div>
   );

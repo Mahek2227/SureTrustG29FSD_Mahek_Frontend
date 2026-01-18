@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
   const searchUser = async (query: string) => {
     try {
       const res = await axios.get<{ users: User[] }>(
-        `${baseUrl}/api/user/search/${query}`
+        `${baseUrl}/user/search/${query}`
       );
       if (res.data.users) {
         setResults(res.data.users);
@@ -257,7 +257,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose, setUser }) => {
         token: string;
         message: string;
         profilePic: string;
-      }>(`${baseUrl}/api/user/login`, {
+      }>(`${baseUrl}/user/login`, {
         email: form.email,
         password: form.password,
       });
@@ -294,7 +294,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose, setUser }) => {
 
     try {
       const res = await axios.post<{ message: string }>(
-        `${baseUrl}/api/user/register`,
+        `${baseUrl}/user/register`,
         {
           email: form.email,
           password: form.password,
