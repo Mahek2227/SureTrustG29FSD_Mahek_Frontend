@@ -1,10 +1,7 @@
 import { io } from "socket.io-client";
-import { baseUrl } from "../baseUrl";
 
-export const socket = io(
-  baseUrl.replace("/api", ""), // remove /api for socket
-  {
-    transports: ["polling", "websocket"],
-    autoConnect: true,
-  }
-);
+// replace with your backend URL
+export const socket = io("https://suretrustg29fsd-mahek.onrender.com", {
+  transports: ["polling", "websocket"],
+  autoConnect: true,
+});
