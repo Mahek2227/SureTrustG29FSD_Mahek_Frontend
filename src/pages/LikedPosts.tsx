@@ -47,37 +47,33 @@ const LikedPosts = () => {
   }, []);
 
   // Handle Like (unchanged)
-  const handleLike = async (postId: string) => {
-    try {
-      await likePost(postId);
-      setPosts((prev) =>
-        prev.map((p) =>
-          p._id === postId
-            ? { ...p, likes: [...p.likes, "dummyUserId"] }
-            : p
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // Handle Like
+const handleLike = async (postId: string) => {
+  try {
+    const res = await likePost(postId); // API call
+    const updatedPost = res.data.post;  // <-- Use this
+    setPosts(prev =>
+      prev.map(p => (p._id === postId ? updatedPost : p))
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-  // Handle Comment (unchanged)
-  const handleComment = async (postId: string, text: string) => {
-    if (!text.trim()) return;
-    try {
-      const res = await commentPost(postId, text);
-      setPosts((prev) =>
-        prev.map((p) =>
-          p._id === postId
-            ? { ...p, comments: [...p.comments, res.comment] }
-            : p
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+// Handle Comment
+const handleComment = async (postId: string, text: string) => {
+  if (!text.trim()) return;
+  try {
+    const res = await addComment(postId, text); // API call
+    const updatedPost = res.data.post;  // <-- Use this
+    setPosts(prev =>
+      prev.map(p => (p._id === postId ? updatedPost : p))
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   return (
     <div className="w-full h-screen bg-gray-100 flex">

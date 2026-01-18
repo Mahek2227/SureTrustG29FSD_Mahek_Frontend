@@ -98,6 +98,35 @@ const Home: React.FC = () => {
   //   );
   // };
 
+    // Handle Like
+const handleLike = async (postId: string) => {
+  try {
+    const res = await likePost(postId); // API call
+    const updatedPost = res.data.post;  // <-- Use this
+    setPosts(prev =>
+      prev.map(p => (p._id === postId ? updatedPost : p))
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// Handle Comment
+const handleComment = async (postId: string, text: string) => {
+  if (!text.trim()) return;
+  try {
+    const res = await addComment(postId, text); // API call
+    const updatedPost = res.data.post;  // <-- Use this
+    setPosts(prev =>
+      prev.map(p => (p._id === postId ? updatedPost : p))
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+
   // Delete post function
   const handleDeletePostFromHome = async (postId: string) => {
     try {
