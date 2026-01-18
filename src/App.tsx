@@ -12,7 +12,7 @@ import LikedPosts from "./pages/LikedPosts";
 import DeletedPosts from "./pages/DeletedPosts";
 import FriendProfile from './pages/FriendProfilepage'
 import Settings from "./pages/Settings";
-import MyPost from "./pages/Mypost";
+import MyPost from "./pages/MyPost";
 import Chatpopup from './components/Chatpopup'
 import { useEffect } from 'react'
 

@@ -66,7 +66,7 @@ export const likePost = async (postId: string) => {
   return res.json();
 };
 
-export const commentPost = async (postId: string, text: string) => {
+export const addComment = async (postId: string, text: string) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${baseUrl}/post/comment/${postId}`, {
     method: "POST",

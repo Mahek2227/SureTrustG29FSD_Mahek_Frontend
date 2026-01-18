@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import PostCard from "../components/Post";
-import { getMyPosts, likePost, commentPost } from "../api/postApi";
+import { getMyPosts, likePost, addComment } from "../api/postApi";
 
 const MyPost = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -19,7 +19,7 @@ const MyPost = () => {
   };
 
   const handleComment = async (id: string, text: string) => {
-    const res = await commentPost(id, text);
+    const res = await addComment(id, text);
     setPosts((prev) =>
       prev.map((p) =>
         p._id === id ? { ...p, comments: res.post.comments } : p

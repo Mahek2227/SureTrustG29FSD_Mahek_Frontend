@@ -19,7 +19,12 @@ interface PostProps {
   onComment?: (id: string, text: string) => void;
   isOwnPost?: boolean;
   alreadyLiked?: boolean;
+  isProfilePage?: boolean;
+  comments_count?: number;
+  onDelete?: (postId: string) => void | Promise<void>; // ✅ add this
 }
+
+
 
 const Post: React.FC<PostProps> = ({
   id,

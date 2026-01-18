@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLikedPosts, likePost, commentPost } from "../api/postApi";
+import { getLikedPosts, } from "../api/postApi";
 
 
 
@@ -50,32 +50,6 @@ const LikedPosts = () => {
 
   // Handle Like (unchanged)
   // Handle Like
-const handleLike = async (postId: string) => {
-  try {
-    const res = await likePost(postId); // API call
-    const updatedPost = res.data.post;  // <-- Use this
-    setPosts(prev =>
-      prev.map(p => (p._id === postId ? updatedPost : p))
-    );
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-// Handle Comment
-const handleComment = async (postId: string, text: string) => {
-  if (!text.trim()) return;
-  try {
-    const res = await addComment(postId, text); // API call
-    const updatedPost = res.data.post;  // <-- Use this
-    setPosts(prev =>
-      prev.map(p => (p._id === postId ? updatedPost : p))
-    );
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 
   return (
     <div className="w-full h-screen bg-gray-100 flex">

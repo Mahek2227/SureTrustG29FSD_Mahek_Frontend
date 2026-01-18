@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import PostCard from "../components/Post";
+import { likePost, addComment } from "../api/postApi";
 import axios from "axios";
 import { baseUrl } from "../baseUrl";
 import { Link } from "react-router-dom";
@@ -19,6 +20,7 @@ interface Post {
   image?: string;
   likes: string[];
   comments: any[];
+
   user: {
     _id: string;
     name: string;
@@ -586,6 +588,8 @@ const handleComment = async (postId: string, text: string) => {
                   comments={post.comments}
                   comments_count={post.comments?.length || 0}
                   postImage={post.image}
+                   onLike={handleLike}          // ✅ ADD
+                   onComment={handleComment}
                   // onUpdate={handleUpdatePost}
                   onDelete={handleDeletePostFromHome}
                   isProfilePage={false}
