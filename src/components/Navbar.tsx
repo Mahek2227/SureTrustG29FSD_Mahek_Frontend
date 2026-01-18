@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
       <nav className="w-full h-13 bg-linear-to-r from-red-600 via-red-500 to-rose-500 shadow-lg border-b border-red-700/30 flex items-center justify-between px-6 sticky top-0 z-50">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-10 h-10 bg-linear-to-br from-amber-400 to-yellow-600 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-            <img src="../../public/logo.png" alt="Logo" className="w-10 h-10 rounded-full flex items-center justify-center" />
+            <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-full flex items-center justify-center" />
           </div>
           <h1 className="font-bold text-2xl text-white tracking-tight hidden sm:block">
             PulseNet    
