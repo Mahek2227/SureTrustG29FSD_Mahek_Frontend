@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getLikedPosts, likePost, commentPost } from "../api/postApi";
 
+
+
 interface Comment {
   user: string;
   text: string;

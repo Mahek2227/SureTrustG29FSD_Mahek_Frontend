@@ -4,6 +4,8 @@ import axios from "axios";
 import { baseUrl } from "../baseUrl";
 import { Link } from "react-router-dom";
 
+
+
 interface Friend {
   _id: string;
   name: string;
