@@ -36,7 +36,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          {/* Default "/" goes to /login */}
+          
           <Route path="/" element={<Home />} />
 
           

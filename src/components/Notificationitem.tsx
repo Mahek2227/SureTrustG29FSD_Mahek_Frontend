@@ -1,10 +1,12 @@
 import React from "react";
+
+/* 🔧 FIXED INTERFACE */
 export interface NotificationData {
   _id: string;
   from: {
-    name: string;
-    profilePic: string;
-  };
+    name?: string;
+    profilePic?: string;
+  } | null;
   post?: {
     text?: string;
     imageUrl?: string;
@@ -34,6 +36,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             </svg>
           </div>
         );
+
       case "comment":
         return (
           <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-full flex items-center justify-center shadow-md">
@@ -42,6 +45,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             </svg>
           </div>
         );
+
       case "follow":
       case "friend_request":
         return (
@@ -51,6 +55,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             </svg>
           </div>
         );
+
       default:
         return (
           <div className="w-10 h-10 bg-gradient-to-br from-gray-600 to-gray-800 rounded-full flex items-center justify-center shadow-md">
@@ -79,76 +84,43 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 
   return (
     <div
-      className={`bg-white rounded-2xl p-4 shadow-md border transition-all duration-300 hover:shadow-xl group ${
+      className={`bg-white rounded-2xl p-4 shadow-md border transition-all ${
         notification.checked
           ? "border-gray-100"
           : "border-red-200 bg-gradient-to-r from-red-50/50 to-rose-50/50"
       }`}
     >
       <div className="flex gap-4">
-        {/* ICON */}
-        <div className="flex-shrink-0">
-          {getNotificationIcon(notification.type)}
-        </div>
+        <div>{getNotificationIcon(notification.type)}</div>
 
-        {/* CONTENT */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-3">
+        <div className="flex-1">
+          <div className="flex justify-between">
             <div className="flex items-center gap-2 flex-wrap">
               <img
-                src={notification.from.profilePic || "https://via.placeholder.com/40"}
-                alt={notification.from.name}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-gray-100"
+                src={notification.from?.profilePic || "https://via.placeholder.com/40"}
+                alt={notification.from?.name || "User"}
+                className="w-8 h-8 rounded-full"
               />
-              <div>
-                <span className="font-semibold text-gray-900 hover:text-red-600 transition-colors cursor-pointer">
-                  {notification.from.name}
-                </span>
-                <span className="text-gray-600 ml-1">
-                  {notification.message || "interacted with your post"}
-                </span>
-              </div>
+              <span className="font-semibold">
+                {notification.from?.name || "Deleted User"}
+              </span>
+              <span className="text-gray-600">
+                {notification.message || "interacted with your post"}
+              </span>
             </div>
 
             {!notification.checked && (
               <button
                 onClick={() => onMarkChecked(notification._id)}
-                className="flex-shrink-0 text-xs bg-red-100 text-red-600 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-all duration-300 group-hover:scale-105"
+                className="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full"
               >
                 Mark Read
               </button>
             )}
           </div>
 
-          {/* POST PREVIEW */}
-          {notification.post && (
-            <div className="mt-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-              {notification.post.text && (
-                <p className="text-sm text-gray-700 line-clamp-2">
-                  {notification.post.text}
-                </p>
-              )}
-              {notification.post.imageUrl && (
-                <img
-                  src={notification.post.imageUrl}
-                  alt="Post"
-                  className="mt-2 w-full h-32 object-cover rounded-lg"
-                />
-              )}
-            </div>
-          )}
-
-          {/* TIMESTAMP */}
-          <div className="flex items-center gap-2 mt-3">
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-xs text-gray-500">
-              {getTimeAgo(notification.createdAt)}
-            </span>
-            {!notification.checked && (
-              <span className="ml-auto w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-            )}
+          <div className="mt-2 text-xs text-gray-500">
+            {getTimeAgo(notification.createdAt)}
           </div>
         </div>
       </div>

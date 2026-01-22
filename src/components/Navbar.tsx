@@ -268,10 +268,10 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose, setUser }) => {
 
       const userName = res.data.message.split(" ")[0];
       setUser(userName);
-
+      
       alert(`Login successful for ${userName}`);
       console.log(res.data);
-
+      
       onClose();
       navigate("/");
     } catch (err) {
