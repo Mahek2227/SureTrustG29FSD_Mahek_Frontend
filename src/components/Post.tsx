@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef} from "react";
+import { FaTrash } from "react-icons/fa";
 
 interface Comment {
   
@@ -36,6 +37,7 @@ const Post: React.FC<PostProps> = ({
   postImage,
   onLike,
   onComment,
+  onDelete,
   isOwnPost = false,
   alreadyLiked = false,
 }) => {
@@ -43,6 +45,24 @@ const Post: React.FC<PostProps> = ({
   const [localComments, setLocalComments] = useState<Comment[]>(comments);
   const [commentText, setCommentText] = useState("");
   const [showCommentInput, setShowCommentInput] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  
+  const menuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {setLocalLikes(likes);}, [likes]);
+
+  useEffect(() => {setLocalComments(comments);}, [comments]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+
   
  
 
@@ -57,18 +77,62 @@ const Post: React.FC<PostProps> = ({
   };
 
   const handleLikeClick = () => {
-    if (isOwnPost || alreadyLiked) return;
-    setLocalLikes(localLikes + 1);
-    if (onLike) onLike(id);
+  if (isOwnPost) return;
+  setLocalLikes((prev) => prev + 1);
+  if (onLike) onLike(id);
   };
+  const handleDelete = () => {
+  if (!onDelete) return;
+
+  const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+  if (!confirmDelete) return;
+
+  onDelete(id);
+};
+
 
   return (
     <div className="w-full max-w-xl bg-white rounded-xl shadow-md p-4">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <img src={profilePhoto} alt={userName} className="w-12 h-12 rounded-full object-cover" />
-        <span className="font-semibold">{userName}</span>
+      
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+           <img
+            src={profilePhoto}
+             alt={userName}
+             className="w-12 h-12 rounded-full object-cover"
+           />
+          <span className="font-semibold">{userName}</span>
+        </div>
+
+         
+        {/* 3-LINES MENU (sir style) */}
+        {isOwnPost && (
+          <div ref={menuRef} className="relative">
+            <button
+              onClick={() => setShowMenu((prev) => !prev)}
+              className="flex flex-col gap-[3px] p-1"
+            >
+              <span className="w-5 h-[2px] bg-gray-700 rounded"></span>
+              <span className="w-5 h-[2px] bg-gray-700 rounded"></span>
+              <span className="w-5 h-[2px] bg-gray-700 rounded"></span>
+            </button>
+
+            {showMenu && (
+              <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md z-20">
+                <button
+                  onClick={handleDelete}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-gray-100"
+                >
+                  <FaTrash size={14} />
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
 
       {/* Caption */}
       <p className="mt-2 text-gray-700">{caption}</p>
@@ -120,7 +184,7 @@ const Post: React.FC<PostProps> = ({
           <div className="max-h-40 overflow-y-auto">
             {localComments.length > 0 ? (
               localComments.map((comment,) => (
-                <div key={comment.id} className="border-b py-2">
+                <div key={comment.id || comment.id} className="border-b py-2">
                   <p className="text-sm">{comment.text}</p>
                 </div>
               ))

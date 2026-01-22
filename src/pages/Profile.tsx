@@ -377,6 +377,7 @@ const Profile: React.FC = () => {
               comments_count={post.comments?.length || 0}
               postImage={post.image}
               isProfilePage
+              isOwnPost={true}
               onDelete={handleDeletePost}
               comments={post.comments}
             />

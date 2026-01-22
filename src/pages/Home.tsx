@@ -160,7 +160,7 @@ const handleComment = async (postId: string, text: string) => {
       }
 
       const res = await axios.get(
-        `${baseUrl}/user/feed?page=${pageNum}&limit=5`,
+        `${baseUrl}/post/feed?page=${pageNum}&limit=5`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -588,7 +588,7 @@ const handleComment = async (postId: string, text: string) => {
                   comments={post.comments}
                   comments_count={post.comments?.length || 0}
                   postImage={post.image}
-                   onLike={handleLike}          // ✅ ADD
+                   onLike={handleLike}         
                    onComment={handleComment}
                   // onUpdate={handleUpdatePost}
                   onDelete={handleDeletePostFromHome}
